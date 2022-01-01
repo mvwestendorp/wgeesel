@@ -48,7 +48,7 @@ wgee<-function(model,data,id,family,corstr,scale=NULL,mismodel=NULL,maxit=200, t
   D_i=lapply(res_list,function(x){x[[5]]})
   W_i=lapply(res_list,function(x){x[[6]]})
   V_i=lapply(res_list,function(x){x[[7]]})
-  sum_US_SS_i=Reduce("+",US_i)%*%solve(Reduce("+",SS_i))
+  sum_US_SS_i=Reduce("+", lapply(US_i, function(x) replace(x, is.na(x), 0)))%*%solve(Reduce("+",SS_i))
   variance=V_w_est(id,U_i,logit_S_i,sum_US_SS_i,D_i,W_i,V_i)
   mu_fit=exp(x%*%beta_est)/(1+exp(x%*%beta_est))
   final_res=list(beta=beta_est,var=variance,mu_fit=mu_fit,scale=scale,rho=fit$rho,weight=weight,model=model,x=x,y=y,mis_fit=mis_fit,call=call,id=id,data=data,family=family,corstr=corstr)

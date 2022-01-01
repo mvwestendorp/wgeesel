@@ -68,7 +68,7 @@ newton_raphson <-function(id,x,y,weight,scale,corstr,family,maxit,tol){
     mat1=lapply(est,function(x){x[[1]]})
     mat2=lapply(est,function(x){x[[2]]}) 
 
-    beta_new=beta_s+solve(Reduce('+',mat2))%*%Reduce('+',mat1)
+    beta_new=beta_s+solve(Reduce('+',mat2))%*%Reduce("+", lapply(mat1, function(x) replace(x, is.na(x), 0)))
     dif=sum(abs(beta_new-beta_s))
     if(dif<tol) {
       beta_s=beta_new
